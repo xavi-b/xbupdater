@@ -1,0 +1,5 @@
+[submodule "third-party/xbapplication"]
+	path = third-party/xbapplication
+	url = git@github.com:xavi-b/xbapplication.git
+    branches = master
+    ignore = all
