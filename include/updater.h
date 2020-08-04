@@ -27,6 +27,7 @@ private:
     void updateDownloadedHandler(QNetworkReply* reply);
 
 protected:
+    virtual QString updateUrl() const = 0;
     virtual void update();
     virtual void updateFinished(QByteArray const&);
 

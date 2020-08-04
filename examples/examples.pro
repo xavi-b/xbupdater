@@ -1,7 +1,7 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    lib \
-    examples
+    $$PWD/application \
+    $$PWD/updater
 
 CONFIG += ordered

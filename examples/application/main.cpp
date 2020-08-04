@@ -1,12 +1,12 @@
 #include <QMessageBox>
-#include "updater.h"
+#include "exampleupdatableapplication.h"
 
 int main(int argc, char *argv[])
 {
-    XB::Updater a("Updater",
-                  "xavi-b.fr",
-                  "xavi-b",
-                  argc, argv);
+    ExampleUpdatableApplication a("ExampleUpdatableApplication",
+                                  "xavi-b.fr",
+                                  "xavi-b",
+                                  argc, argv);
 
     if(!a.checkUniqueInstance())
     {

@@ -18,7 +18,7 @@ void Updater::updateDownloadedHandler(QNetworkReply* reply)
 void Updater::update()
 {
     this->widget->show();
-    QUrl updateUrl = QUrl("http://localhost/update.file");
+    QUrl updateUrl = QUrl(this->updateUrl());
     connect(&this->downloadManager, &QNetworkAccessManager::finished, this, &Updater::updateDownloadedHandler);
     QNetworkRequest request(updateUrl);
     request.setTransferTimeout(this->transferTimeout);
