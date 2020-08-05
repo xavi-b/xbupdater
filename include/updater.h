@@ -27,7 +27,7 @@ private:
     void updateDownloadedHandler(QNetworkReply* reply);
 
 protected:
-    virtual QString updateUrl() const = 0;
+    virtual QUrl updateUrl() const = 0;
     virtual void update();
     virtual void updateFinished(QByteArray const&);
 
@@ -35,7 +35,7 @@ public:
     Updater(QString const& applicationName,
             QString const& organizationDomain,
             QString const& organizationName,
-            int argc, char *argv[]);
+            int& argc, char *argv[]);
 
     virtual void processArguments(QStringList const& args) override;
 

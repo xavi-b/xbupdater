@@ -8,12 +8,13 @@ class ExampleUpdatableApplication : public XB::UpdatableApplication
     Q_OBJECT
 protected:
     virtual bool shouldUpdate(QUrl const& updateUrl) const override;
+    virtual bool applyUpdate(QByteArray const& data) override;
 
 public:
     ExampleUpdatableApplication(QString const& applicationName,
                                 QString const& organizationDomain,
                                 QString const& organizationName,
-                                int argc, char *argv[]);
+                                int& argc, char *argv[]);
 
     virtual void processArguments(QStringList const& args) override;
 };

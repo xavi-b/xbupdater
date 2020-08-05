@@ -18,7 +18,7 @@ void Updater::updateDownloadedHandler(QNetworkReply* reply)
 void Updater::update()
 {
     this->widget->show();
-    QUrl updateUrl = QUrl(this->updateUrl());
+    QUrl updateUrl = this->updateUrl();
     connect(&this->downloadManager, &QNetworkAccessManager::finished, this, &Updater::updateDownloadedHandler);
     QNetworkRequest request(updateUrl);
     request.setTransferTimeout(this->transferTimeout);
@@ -54,7 +54,7 @@ void Updater::updateFinished(QByteArray const& data)
 Updater::Updater(QString const& applicationName,
                  QString const& organizationDomain,
                  QString const& organizationName,
-                 int argc, char *argv[])
+                 int& argc, char *argv[])
     : Application(applicationName,
                       organizationDomain,
                       organizationName,

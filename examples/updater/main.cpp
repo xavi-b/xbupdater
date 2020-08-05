@@ -1,3 +1,4 @@
+#include <iostream>
 #include <QMessageBox>
 #include "exampleupdater.h"
 
@@ -8,6 +9,8 @@ int main(int argc, char *argv[])
                      "xavi-b",
                      argc, argv);
 
+    std::cout << "ExampleUpdater" << std::endl;
+
     if(!a.checkUniqueInstance())
     {
         QMessageBox::warning(nullptr,
@@ -15,6 +18,8 @@ int main(int argc, char *argv[])
                              "There currently is a started update, this instance will close.");
         return 1;
     }
+
+    a.processArguments(a.arguments());
 
     return a.exec();
 }

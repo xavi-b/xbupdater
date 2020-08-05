@@ -1,3 +1,4 @@
+#include <iostream>
 #include <QMessageBox>
 #include "exampleupdatableapplication.h"
 
@@ -8,13 +9,16 @@ int main(int argc, char *argv[])
                                   "xavi-b",
                                   argc, argv);
 
-    if(!a.checkUniqueInstance())
-    {
-        QMessageBox::warning(nullptr,
-                             "Updater already started",
-                             "There currently is a started update, this instance will close.");
-        return 1;
-    }
+    std::cout << "ExampleUpdatableApplication" << std::endl;
+
+    auto dir = QFileInfo(QCoreApplication::applicationFilePath()).dir();
+    dir.cdUp();
+    dir.cd("updater");
+    a.setUpdateUrl(QUrl::fromLocalFile(dir.filePath("updater.zip")));
+
+    a.processArguments(a.arguments());
+
+    qDebug() << "checkForUpdates" << a.checkForUpdates();
 
     return a.exec();
 }
