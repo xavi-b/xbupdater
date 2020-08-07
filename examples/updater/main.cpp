@@ -11,6 +11,8 @@ int main(int argc, char *argv[])
 
     std::cout << "ExampleUpdater" << std::endl;
 
+    QMessageBox::information(nullptr, "Updater", "Updating !");
+
     if(!a.checkUniqueInstance())
     {
         QMessageBox::warning(nullptr,

@@ -15,7 +15,7 @@
 namespace XB
 {
 
-class Updater : public Application
+class Q_DECL_EXPORT Updater : public Application
 {
     Q_OBJECT
 private:
@@ -29,7 +29,7 @@ private:
 protected:
     virtual QUrl updateUrl() const = 0;
     virtual void update();
-    virtual void updateFinished(QByteArray const&);
+    virtual void updateFinished(QByteArray const&) = 0;
 
 public:
     Updater(QString const& applicationName,

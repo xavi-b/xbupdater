@@ -9,8 +9,9 @@
 namespace XB
 {
 
-class UpdaterWidget: public QWidget
+class Q_DECL_EXPORT UpdaterWidget: public QWidget
 {
+    Q_OBJECT
 private:
     QProgressBar* progressBar;
 

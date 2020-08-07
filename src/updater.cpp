@@ -26,31 +26,6 @@ void Updater::update()
     connect(reply, &QNetworkReply::downloadProgress, this, &Updater::downloadProgressHandler);
 }
 
-void Updater::updateFinished(QByteArray const& data)
-{
-    QFileInfo executable = this->arguments()[0];
-    QFile file(executable.filePath());
-    if(file.open(QIODevice::WriteOnly))
-    {
-        file.write(data);
-        file.close();
-        QMessageBox::information(nullptr,
-                                 "Update finished",
-                                 "Update has finished, your application should start in a few moments.");
-        QStringList arguments = this->arguments();
-        arguments.removeAt(0);
-        this->quit();
-        QProcess::startDetached(executable.filePath(), arguments);
-    }
-    else
-    {
-        QMessageBox::critical(nullptr,
-                              "Error updating",
-                              "Updater could not replace existing executable !");
-        this->quit();
-    }
-}
-
 Updater::Updater(QString const& applicationName,
                  QString const& organizationDomain,
                  QString const& organizationName,

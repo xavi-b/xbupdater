@@ -1,5 +1,5 @@
 QT             += core gui widgets network
-CONFIG         += c++17 console
+CONFIG         += c++17
 DESTDIR         = $$PWD
 
 SOURCES += \
@@ -12,8 +12,15 @@ LIBS += -L$$PWD/../../third-party/xbapplication/lib -lxbapplication
 HEADERS += \
     exampleupdatableapplication.h
 
-copydata.commands = $(COPY_DIR) $$PWD/application $$PWD/application2
-first.depends = $(first) copydata
-export(first.depends)
-export(copydata.commands)
-QMAKE_EXTRA_TARGETS += first copydata
+unix {
+copydata.commands = cp -r $$PWD/application $$PWD/application2
+QMAKE_EXTRA_TARGETS += copydata
+QMAKE_POST_LINK += copydata
+}
+
+win32 {
+copydata.commands = $$quote($(COPY_FILE) $$shell_path($$PWD/application.exe) $$shell_path($$PWD/application2.exe))
+copylib1.commands = $$quote($(COPY_FILE) $$shell_path($$PWD/../../lib/xbupdater.dll) $$shell_path($$PWD/xbupdater.dll))
+copylib2.commands = $$quote($(COPY_FILE) $$shell_path($$PWD/../../third-party/xbapplication/lib/xbapplication.dll) $$shell_path($$PWD/xbapplication.dll))
+QMAKE_POST_LINK += $$copydata.commands && $$copylib1.commands && $$copylib2.commands
+}

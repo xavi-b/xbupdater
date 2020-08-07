@@ -25,22 +25,40 @@ bool ExampleUpdatableApplication::applyUpdate(QByteArray const& data)
             dir.cdUp();
         }
 
+#ifdef Q_OS_WIN
+        dir.mkdir("updater");
+#endif
+
         QProcess unzipProcess;
+#ifdef Q_OS_WIN
+        unzipProcess.setProgram("tar");
+        unzipProcess.setArguments({ "-xzvf", QFileInfo(updater).filePath(), "-C", dir.filePath("updater") });
+#else
         unzipProcess.setProgram("unzip");
         unzipProcess.setArguments({ QFileInfo(updater).filePath(), "-d", dir.filePath("updater") });
+#endif
         unzipProcess.start();
         unzipProcess.waitForStarted();
         unzipProcess.waitForFinished();
 
+#ifdef Q_OS_WIN
+        QFile file(dir.filePath("updater/updater.exe"));
+#else
         QFile file(dir.filePath("updater/updater"));
+#endif
         if(file.open(QIODevice::ReadWrite))
         {
             file.setPermissions(QFileDevice::ReadOwner | QFileDevice::WriteOwner | QFileDevice::ExeOwner);
+//#ifdef Q_OS_WIN
+//            QProcess::startDetached("C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe", { });
+//#endif
+            QString filePath = QFileInfo(file).filePath();
+            QString dirPath = QFileInfo(file).dir().path();
+            file.close();
+
             QProcess proc;
-            proc.setProgram(QFileInfo(file).filePath());
-            proc.setArguments(args);
-            proc.start();
-            proc.waitForFinished();
+            proc.startDetached(filePath, args, dirPath);
+            proc.waitForStarted();
             this->quit();
             return true;
         }

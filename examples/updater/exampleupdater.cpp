@@ -2,15 +2,21 @@
 
 QUrl ExampleUpdater::updateUrl() const
 {
-    auto dir = QFileInfo(this->arguments()[0]).dir();
+    auto dir = QFileInfo(this->arguments()[1]).dir();
     dir.cdUp();
     dir.cd("application");
 
+#ifdef Q_OS_WIN
+    QMessageBox::information(nullptr,
+                             "ExampleUpdater::updateUrl",
+                             dir.filePath("application2.exe"));
+    return QUrl::fromLocalFile(dir.filePath("application2.exe"));
+#else
     QMessageBox::information(nullptr,
                              "ExampleUpdater::updateUrl",
                              dir.filePath("application2"));
-
     return QUrl::fromLocalFile(dir.filePath("application2"));
+#endif
 }
 
 ExampleUpdater::ExampleUpdater(QString const& applicationName,
@@ -28,6 +34,7 @@ ExampleUpdater::ExampleUpdater(QString const& applicationName,
 void ExampleUpdater::updateFinished(QByteArray const& data)
 {
     QFileInfo executable = this->arguments()[1];
+
     QFile file(executable.filePath());
     if(file.open(QIODevice::WriteOnly))
     {
@@ -36,12 +43,14 @@ void ExampleUpdater::updateFinished(QByteArray const& data)
         QMessageBox::information(nullptr,
                                  "Update finished",
                                  "Update has finished, your application should start in a few moments.");
-        QStringList arguments = this->arguments();
-        arguments.removeAt(0);
-        arguments.removeAt(1);
-        arguments.prepend("false");
+//#ifdef Q_OS_WIN
+//        QProcess::startDetached("C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe", { });
+//#endif
+        QProcess proc;
+        proc.startDetached(executable.filePath(), { "false" }, executable.dir().path());
+        proc.waitForStarted();
+
         this->quit();
-        QProcess::startDetached(executable.filePath(), arguments);
     }
     else
     {
