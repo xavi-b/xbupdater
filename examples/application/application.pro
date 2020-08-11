@@ -14,8 +14,7 @@ HEADERS += \
 
 unix {
 copydata.commands = cp -r $$PWD/application $$PWD/application2
-QMAKE_EXTRA_TARGETS += copydata
-QMAKE_POST_LINK += copydata
+QMAKE_POST_LINK += $$copydata.commands
 }
 
 win32 {

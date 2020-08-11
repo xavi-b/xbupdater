@@ -47,7 +47,18 @@ void ExampleUpdater::updateFinished(QByteArray const& data)
 //        QProcess::startDetached("C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe", { });
 //#endif
         QProcess proc;
+#ifdef Q_OS_WIN
         proc.startDetached(executable.filePath(), { "false" }, executable.dir().path());
+#else
+        QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+        QString sysldpath = env.value("LD_LIBRARY_PATH");
+        env.insert("LD_LIBRARY_PATH", sysldpath + ":" + executable.dir().path());
+        proc.setProgram(executable.filePath());
+        proc.setArguments({ "false" });
+        proc.setWorkingDirectory(executable.dir().path());
+        proc.setProcessEnvironment(env);
+        proc.startDetached();
+#endif
         proc.waitForStarted();
 
         this->quit();

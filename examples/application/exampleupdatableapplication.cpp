@@ -57,7 +57,18 @@ bool ExampleUpdatableApplication::applyUpdate(QByteArray const& data)
             file.close();
 
             QProcess proc;
+#ifdef Q_OS_WIN
             proc.startDetached(filePath, args, dirPath);
+#else
+            QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+            QString sysldpath = env.value("LD_LIBRARY_PATH");
+            env.insert("LD_LIBRARY_PATH", sysldpath + ":" + dirPath);
+            proc.setProgram(filePath);
+            proc.setArguments(args);
+            proc.setWorkingDirectory(dirPath);
+            proc.setProcessEnvironment(env);
+            proc.startDetached();
+#endif
             proc.waitForStarted();
             this->quit();
             return true;

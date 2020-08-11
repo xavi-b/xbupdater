@@ -16,12 +16,10 @@ HEADERS += \
     exampleupdater.h
 
 unix {
-zip.commands = cd $$PWD && pwd && rm -f updater.zip && zip updater.zip updater libxbupdater.so libxbapplication.so && unzip -l updater.zip
-copylib1.commands = cp -L $$PWD/../../lib/libxbupdater.so $$PWD/libxbupdater.so
-copylib2.commands = cp -L $$PWD/../../third-party/xbapplication/lib/libxbapplication.so $$PWD/libxbapplication.so
-zip.depends = copylib1 copylib2
-QMAKE_EXTRA_TARGETS += copylib1 copylib2 zip
-QMAKE_POST_LINK += copylib1 copylib2 zip
+zip.commands = cd $$PWD && pwd && rm -f updater.zip && zip updater.zip updater libxbupdater.so* libxbapplication.so* && unzip -l updater.zip
+copylib1.commands = cp -L $$PWD/../../lib/libxbupdater.so* $$PWD/.
+copylib2.commands = cp -L $$PWD/../../third-party/xbapplication/lib/libxbapplication.so* $$PWD/.
+QMAKE_POST_LINK += $$copylib1.commands && $$copylib2.commands && $$zip.commands
 }
 
 win32 {
